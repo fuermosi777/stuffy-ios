@@ -1,23 +1,13 @@
-//
-//  StuffyApp.swift
-//  Stuffy
-//
-//  Created by Hao on 10/17/26.
-//
-
 import SwiftUI
 import SwiftData
 
 @main
 struct StuffyApp: App {
     var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Item.self,
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-
+        let schema = Schema([Category.self, Item.self, UsageLog.self, WishlistItem.self])
+        let config = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false, cloudKitDatabase: .automatic)
         do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
+            return try ModelContainer(for: schema, configurations: [config])
         } catch {
             fatalError("Could not create ModelContainer: \(error)")
         }
@@ -25,7 +15,9 @@ struct StuffyApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            RootView()
+                .tint(Theme.accent)
+                .preferredColorScheme(.light)
         }
         .modelContainer(sharedModelContainer)
     }
