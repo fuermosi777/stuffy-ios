@@ -31,4 +31,17 @@ final class Category {
             context.insert(Category(name: d.name, symbol: d.symbol, sortOrder: i))
         }
     }
+
+    /// Two devices can seed defaults before their first sync; merge same-named categories.
+    static func mergeDuplicates(in context: ModelContext) {
+        guard let all = try? context.fetch(FetchDescriptor<Category>(sortBy: [SortDescriptor(\.sortOrder)])) else { return }
+        var keepers: [String: Category] = [:]
+        for c in all {
+            let key = c.name.trimmingCharacters(in: .whitespaces).lowercased()
+            guard let keeper = keepers[key] else { keepers[key] = c; continue }
+            for item in c.items ?? [] { item.category = keeper }
+            for wish in c.wishes ?? [] { wish.category = keeper }
+            context.delete(c)
+        }
+    }
 }

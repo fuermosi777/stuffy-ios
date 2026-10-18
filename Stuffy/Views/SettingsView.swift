@@ -5,6 +5,7 @@ import UserNotifications
 struct SettingsView: View {
     @Query private var items: [Item]
     @Query(filter: #Predicate<WishlistItem> { $0.statusRaw == "declined" }) private var declined: [WishlistItem]
+    @Environment(ICloudStatus.self) private var icloud
     @AppStorage("holdDays") private var holdDays = 14
     @AppStorage("defaultTarget") private var defaultTarget = 2.0
     @AppStorage("idleDays") private var idleDays = 45
@@ -14,6 +15,12 @@ struct SettingsView: View {
     var body: some View {
         NavigationStack {
             Form {
+                if let message = icloud.message {
+                    Section {
+                        Label(message, systemImage: "icloud.slash").font(.subheadline).foregroundStyle(Theme.amberFg)
+                    }
+                    .listRowBackground(Theme.amberBg)
+                }
                 Section {
                     HStack {
                         Image(systemName: "shippingbox.fill").foregroundStyle(.white).frame(width: 44, height: 44)
