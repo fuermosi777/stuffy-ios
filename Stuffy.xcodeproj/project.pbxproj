@@ -1,0 +1,554 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 110;
+	objects = {
+
+/* Begin PBXContainerItemProxy section */
+		CBAA726730849AD700EAF1A2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CBAA724F30849AD600EAF1A2 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CBAA725630849AD600EAF1A2;
+			remoteInfo = Stuffy;
+		};
+		CBAA727130849AD700EAF1A2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CBAA724F30849AD600EAF1A2 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CBAA725630849AD600EAF1A2;
+			remoteInfo = Stuffy;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		CBAA725730849AD600EAF1A2 /* Stuffy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Stuffy.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CBAA726630849AD700EAF1A2 /* StuffyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StuffyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		CBAA727030849AD700EAF1A2 /* StuffyUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StuffyUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		CBAA725930849AD600EAF1A2 /* Stuffy */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Stuffy;
+			sourceTree = "<group>";
+		};
+		CBAA726930849AD700EAF1A2 /* StuffyTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = StuffyTests;
+			sourceTree = "<group>";
+		};
+		CBAA727330849AD700EAF1A2 /* StuffyUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = StuffyUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		CBAA725430849AD600EAF1A2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			files = (
+			);
+		};
+		CBAA726330849AD700EAF1A2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			files = (
+			);
+		};
+		CBAA726D30849AD700EAF1A2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			files = (
+			);
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		CBAA724E30849AD600EAF1A2 = {
+			isa = PBXGroup;
+			children = (
+				CBAA725930849AD600EAF1A2 /* Stuffy */,
+				CBAA726930849AD700EAF1A2 /* StuffyTests */,
+				CBAA727330849AD700EAF1A2 /* StuffyUITests */,
+				CBAA725830849AD600EAF1A2 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		CBAA725830849AD600EAF1A2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CBAA725730849AD600EAF1A2 /* Stuffy.app */,
+				CBAA726630849AD700EAF1A2 /* StuffyTests.xctest */,
+				CBAA727030849AD700EAF1A2 /* StuffyUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		CBAA725630849AD600EAF1A2 /* Stuffy */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CBAA727830849AD700EAF1A2 /* Build configuration list for PBXNativeTarget "Stuffy" */;
+			buildPhases = (
+				CBAA725330849AD600EAF1A2 /* Sources */,
+				CBAA725430849AD600EAF1A2 /* Frameworks */,
+				CBAA725530849AD600EAF1A2 /* Resources */,
+			);
+			buildRules = (
+			);
+			fileSystemSynchronizedGroups = (
+				CBAA725930849AD600EAF1A2 /* Stuffy */,
+			);
+			name = Stuffy;
+			productName = Stuffy;
+			productReference = CBAA725730849AD600EAF1A2 /* Stuffy.app */;
+			productType = "com.apple.product-type.application";
+		};
+		CBAA726530849AD700EAF1A2 /* StuffyTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CBAA727B30849AD700EAF1A2 /* Build configuration list for PBXNativeTarget "StuffyTests" */;
+			buildPhases = (
+				CBAA726230849AD700EAF1A2 /* Sources */,
+				CBAA726330849AD700EAF1A2 /* Frameworks */,
+				CBAA726430849AD700EAF1A2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				CBAA726830849AD700EAF1A2 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				CBAA726930849AD700EAF1A2 /* StuffyTests */,
+			);
+			name = StuffyTests;
+			productName = StuffyTests;
+			productReference = CBAA726630849AD700EAF1A2 /* StuffyTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		CBAA726F30849AD700EAF1A2 /* StuffyUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CBAA727E30849AD700EAF1A2 /* Build configuration list for PBXNativeTarget "StuffyUITests" */;
+			buildPhases = (
+				CBAA726C30849AD700EAF1A2 /* Sources */,
+				CBAA726D30849AD700EAF1A2 /* Frameworks */,
+				CBAA726E30849AD700EAF1A2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				CBAA727230849AD700EAF1A2 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				CBAA727330849AD700EAF1A2 /* StuffyUITests */,
+			);
+			name = StuffyUITests;
+			productName = StuffyUITests;
+			productReference = CBAA727030849AD700EAF1A2 /* StuffyUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		CBAA724F30849AD600EAF1A2 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2710;
+				LastUpgradeCheck = 2710;
+				TargetAttributes = {
+					CBAA725630849AD600EAF1A2 = {
+						CreatedOnToolsVersion = 27.1;
+					};
+					CBAA726530849AD700EAF1A2 = {
+						CreatedOnToolsVersion = 27.1;
+						TestTargetID = CBAA725630849AD600EAF1A2;
+					};
+					CBAA726F30849AD700EAF1A2 = {
+						CreatedOnToolsVersion = 27.1;
+						TestTargetID = CBAA725630849AD600EAF1A2;
+					};
+				};
+			};
+			buildConfigurationList = CBAA725230849AD600EAF1A2 /* Build configuration list for PBXProject "Stuffy" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = CBAA724E30849AD600EAF1A2;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = CBAA725830849AD600EAF1A2 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				CBAA725630849AD600EAF1A2 /* Stuffy */,
+				CBAA726530849AD700EAF1A2 /* StuffyTests */,
+				CBAA726F30849AD700EAF1A2 /* StuffyUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		CBAA725530849AD600EAF1A2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+			);
+		};
+		CBAA726430849AD700EAF1A2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+			);
+		};
+		CBAA726E30849AD700EAF1A2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+			);
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		CBAA725330849AD600EAF1A2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+			);
+		};
+		CBAA726230849AD700EAF1A2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+			);
+		};
+		CBAA726C30849AD700EAF1A2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+			);
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		CBAA726830849AD700EAF1A2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CBAA725630849AD600EAF1A2 /* Stuffy */;
+			targetProxy = CBAA726730849AD700EAF1A2 /* PBXContainerItemProxy */;
+		};
+		CBAA727230849AD700EAF1A2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CBAA725630849AD600EAF1A2 /* Stuffy */;
+			targetProxy = CBAA727130849AD700EAF1A2 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		CBAA727630849AD700EAF1A2 /* Debug configuration for PBXProject "Stuffy" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = CFR9F99TN9;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		CBAA727730849AD700EAF1A2 /* Release configuration for PBXProject "Stuffy" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = CFR9F99TN9;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		CBAA727930849AD700EAF1A2 /* Debug configuration for PBXNativeTarget "Stuffy" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CFR9F99TN9;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = im.liuhao.Stuffy;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		CBAA727A30849AD700EAF1A2 /* Release configuration for PBXNativeTarget "Stuffy" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CFR9F99TN9;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = im.liuhao.Stuffy;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		CBAA727C30849AD700EAF1A2 /* Debug configuration for PBXNativeTarget "StuffyTests" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CFR9F99TN9;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = im.liuhao.StuffyTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Stuffy.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Stuffy";
+			};
+			name = Debug;
+		};
+		CBAA727D30849AD700EAF1A2 /* Release configuration for PBXNativeTarget "StuffyTests" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CFR9F99TN9;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = im.liuhao.StuffyTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Stuffy.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Stuffy";
+			};
+			name = Release;
+		};
+		CBAA727F30849AD700EAF1A2 /* Debug configuration for PBXNativeTarget "StuffyUITests" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CFR9F99TN9;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = im.liuhao.StuffyUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Stuffy;
+			};
+			name = Debug;
+		};
+		CBAA728030849AD700EAF1A2 /* Release configuration for PBXNativeTarget "StuffyUITests" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CFR9F99TN9;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = im.liuhao.StuffyUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Stuffy;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		CBAA725230849AD600EAF1A2 /* Build configuration list for PBXProject "Stuffy" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CBAA727630849AD700EAF1A2 /* Debug configuration for PBXProject "Stuffy" */,
+				CBAA727730849AD700EAF1A2 /* Release configuration for PBXProject "Stuffy" */,
+			);
+			defaultConfigurationName = Release;
+		};
+		CBAA727830849AD700EAF1A2 /* Build configuration list for PBXNativeTarget "Stuffy" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CBAA727930849AD700EAF1A2 /* Debug configuration for PBXNativeTarget "Stuffy" */,
+				CBAA727A30849AD700EAF1A2 /* Release configuration for PBXNativeTarget "Stuffy" */,
+			);
+			defaultConfigurationName = Release;
+		};
+		CBAA727B30849AD700EAF1A2 /* Build configuration list for PBXNativeTarget "StuffyTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CBAA727C30849AD700EAF1A2 /* Debug configuration for PBXNativeTarget "StuffyTests" */,
+				CBAA727D30849AD700EAF1A2 /* Release configuration for PBXNativeTarget "StuffyTests" */,
+			);
+			defaultConfigurationName = Release;
+		};
+		CBAA727E30849AD700EAF1A2 /* Build configuration list for PBXNativeTarget "StuffyUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CBAA727F30849AD700EAF1A2 /* Debug configuration for PBXNativeTarget "StuffyUITests" */,
+				CBAA728030849AD700EAF1A2 /* Release configuration for PBXNativeTarget "StuffyUITests" */,
+			);
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = CBAA724F30849AD600EAF1A2 /* Project object */;
+	validationLevel = 1;
+}
