@@ -22,6 +22,7 @@ struct ItemDetailView: View {
                         progressCard
                         if item.isActive { logButton } else { endedBanner }
                         metaCard
+                        notesCard
                         historyCard
                     }
                     .padding(16)
@@ -172,6 +173,19 @@ struct ItemDetailView: View {
                 metaRow("Last worn", item.lastUsed == nil ? "Not yet" : lastUsedText(Item.days(from: item.lastUsed!, to: Date())))
             }
             .padding(.horizontal, 16)
+        }
+    }
+
+    @ViewBuilder private var notesCard: some View {
+        if !item.notes.isEmpty {
+            Card {
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("Notes").font(.system(size: 13, weight: .semibold)).foregroundStyle(Theme.secondary)
+                    Text(item.notes).font(.system(size: 15))
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(16)
+            }
         }
     }
 

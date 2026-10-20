@@ -18,6 +18,7 @@ final class Item {
     var statusRaw: String = ItemStatus.active.rawValue
     var endedDate: Date?
     var resalePrice: Double = 0
+    var notes: String = ""
     @Attribute(.externalStorage) var photoData: Data?
     var createdAt: Date = Date()
 

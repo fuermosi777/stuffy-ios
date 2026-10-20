@@ -17,6 +17,7 @@ struct ItemFormView: View {
     @State private var date = Date()
     @State private var usedSoFar = 0
     @State private var target = 2.0
+    @State private var notes = ""
     @State private var loaded = false
 
     private var price: Double { Double(priceText) ?? 0 }
@@ -62,6 +63,11 @@ struct ItemFormView: View {
                     Stepper(value: $target, in: 0.5...20, step: 0.5) {
                         HStack { Text("Target"); Spacer(); Text("\(fmt(target))/wear").foregroundStyle(Theme.secondary) }
                     }
+                }
+
+                Section("Notes") {
+                    TextField("Size, where to find it, care tips…", text: $notes, axis: .vertical)
+                        .lineLimit(3...10)
                 }
 
                 Section {
@@ -115,6 +121,7 @@ struct ItemFormView: View {
         date = item.purchaseDate
         usedSoFar = item.initialUses
         target = item.targetCostPerUse
+        notes = item.notes
     }
 
     private func save() {
@@ -122,10 +129,12 @@ struct ItemFormView: View {
         if let item {
             item.brand = b; item.name = n; item.price = price; item.purchaseDate = date
             item.initialUses = usedSoFar; item.targetCostPerUse = target
-            item.category = category; item.photoData = photo
+            item.category = category; item.photoData = photo; item.notes = notes
         } else {
-            context.insert(Item(brand: b, name: n, price: price, purchaseDate: date, targetCostPerUse: target,
-                                initialUses: usedSoFar, category: category, photoData: photo))
+            let new = Item(brand: b, name: n, price: price, purchaseDate: date, targetCostPerUse: target,
+                                initialUses: usedSoFar, category: category, photoData: photo)
+            new.notes = notes
+            context.insert(new)
         }
         dismiss()
     }
