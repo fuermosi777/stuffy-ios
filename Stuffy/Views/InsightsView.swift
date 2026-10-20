@@ -6,6 +6,7 @@ struct InsightsView: View {
     @Environment(\.modelContext) private var context
     @Query private var allItems: [Item]
     @Query(sort: \Category.sortOrder) private var categories: [Category]
+    @Query private var wishlist: [WishlistItem]
     @AppStorage("idleDays") private var idleThreshold = 45
     @State private var selected: Item?
     @State private var toast: Toast?
@@ -40,6 +41,7 @@ struct InsightsView: View {
                     Text("\(money(totalValue)) across \(active.count) items").font(.system(size: 14)).foregroundStyle(Theme.secondary)
                     portfolioCard
                     highlights
+                    ActivityCalendarView(items: allItems, wishlist: wishlist) { selected = $0 }
                     categoryCard
                     graveyard
                     if !sold.isEmpty { recovered }
