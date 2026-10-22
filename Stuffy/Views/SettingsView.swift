@@ -11,6 +11,18 @@ struct SettingsView: View {
     @AppStorage("idleDays") private var idleDays = 45
     @AppStorage("smartGuard") private var smartGuard = true
     @AppStorage("dailyReminder") private var dailyReminder = false
+    /// Minutes after midnight.
+    @AppStorage("reminderMinutes") private var reminderMinutes = 20 * 60
+
+    private var reminderTime: Binding<Date> {
+        Binding(
+            get: { Calendar.current.date(bySettingHour: reminderMinutes / 60, minute: reminderMinutes % 60, second: 0, of: Date()) ?? Date() },
+            set: {
+                let c = Calendar.current.dateComponents([.hour, .minute], from: $0)
+                reminderMinutes = (c.hour ?? 20) * 60 + (c.minute ?? 0)
+            }
+        )
+    }
 
     var body: some View {
         NavigationStack {
@@ -53,10 +65,14 @@ struct SettingsView: View {
                 }
 
                 Section("Reminders") {
-                    Toggle(isOn: $dailyReminder) {
-                        VStack(alignment: .leading) { Text("Daily log reminder"); Text("8:00 PM").font(.caption).foregroundStyle(Theme.secondary) }
+                    Toggle("Daily log reminder", isOn: $dailyReminder)
+                        .onChange(of: dailyReminder) { _, on in
+                            Reminders.set(enabled: on, minutes: reminderMinutes) { if !$0 { dailyReminder = false } }
+                        }
+                    if dailyReminder {
+                        DatePicker("Remind me at", selection: reminderTime, displayedComponents: .hourAndMinute)
+                            .onChange(of: reminderMinutes) { _, m in Reminders.set(enabled: true, minutes: m) { _ in } }
                     }
-                    .onChange(of: dailyReminder) { _, on in Reminders.set(enabled: on) { if !$0 { dailyReminder = false } } }
                 }
 
                 Section("Library") {
@@ -86,7 +102,7 @@ struct SettingsView: View {
 enum Reminders {
     private static let id = "daily-log"
 
-    static func set(enabled: Bool, completion: @escaping (Bool) -> Void) {
+    static func set(enabled: Bool, minutes: Int, completion: @escaping (Bool) -> Void) {
         let center = UNUserNotificationCenter.current()
         guard enabled else { center.removePendingNotificationRequests(withIdentifiers: [id]); return }
         center.requestAuthorization(options: [.alert, .sound]) { granted, _ in
@@ -95,7 +111,7 @@ enum Reminders {
             let content = UNMutableNotificationContent()
             content.title = "Wear anything new today?"
             content.body = "One tap to log it in Stuffy."
-            let trigger = UNCalendarNotificationTrigger(dateMatching: DateComponents(hour: 20), repeats: true)
+            let trigger = UNCalendarNotificationTrigger(dateMatching: DateComponents(hour: minutes / 60, minute: minutes % 60), repeats: true)
             center.add(UNNotificationRequest(identifier: id, content: content, trigger: trigger))
         }
     }
