@@ -57,7 +57,7 @@ struct ItemDetailView: View {
                 if let d = item.photoData, let img = UIImage(data: d) {
                     Image(uiImage: img).resizable().scaledToFit()
                 } else {
-                    Image(systemName: item.category?.symbol ?? "photo").font(.system(size: 54)).foregroundStyle(Theme.secondary)
+                    SymbolIcon(name: item.category?.symbol ?? "photo").font(.system(size: 54)).foregroundStyle(Theme.secondary)
                 }
             }
             .clipped()

@@ -122,13 +122,20 @@ struct CategoriesView: View {
     @Query(sort: \Category.sortOrder) private var categories: [Category]
     @State private var newName = ""
     @State private var pendingDelete: Category?
+    @State private var editingIcon: Category?
+    @State private var newSymbol = "tag"
+    @State private var pickingNewIcon = false
 
     var body: some View {
         List {
             Section {
                 ForEach(categories) { c in
                     HStack {
-                        Image(systemName: c.symbol).frame(width: 28).foregroundStyle(Theme.secondary)
+                        Button { editingIcon = c } label: {
+                            SymbolIcon(name: c.symbol).frame(width: 28).foregroundStyle(Theme.secondary)
+                        }
+                        .buttonStyle(.borderless)
+                        .accessibilityLabel("Change icon for \(c.name)")
                         TextField("Name", text: Bindable(c).name)
                         Text("\(c.items?.count ?? 0)").foregroundStyle(Theme.secondary).monospacedDigit()
                     }
@@ -147,12 +154,19 @@ struct CategoriesView: View {
             }
             Section("Add category") {
                 HStack {
+                    Button { pickingNewIcon = true } label: {
+                        SymbolIcon(name: newSymbol).frame(width: 28).foregroundStyle(Theme.secondary)
+                    }
+                    .buttonStyle(.borderless)
+                    .accessibilityLabel("Choose icon")
                     TextField("e.g. Cosmetics", text: $newName).onSubmit(add)
                     Button("Add", action: add).disabled(newName.trimmingCharacters(in: .whitespaces).isEmpty)
                 }
             }
         }
         .navigationTitle("Categories")
+        .sheet(item: $editingIcon) { c in SymbolPickerSheet(selection: Bindable(c).symbol) }
+        .sheet(isPresented: $pickingNewIcon) { SymbolPickerSheet(selection: $newSymbol) }
         .toolbar { EditButton() }
         .confirmationDialog("Delete \(pendingDelete?.name ?? "")?", isPresented: .constant(pendingDelete != nil), titleVisibility: .visible) {
             Button("Delete", role: .destructive) { if let c = pendingDelete { delete(c) }; pendingDelete = nil }
@@ -163,8 +177,9 @@ struct CategoriesView: View {
     private func add() {
         let n = newName.trimmingCharacters(in: .whitespaces)
         guard !n.isEmpty else { return }
-        context.insert(Category(name: n, symbol: "tag", sortOrder: (categories.map(\.sortOrder).max() ?? -1) + 1))
+        context.insert(Category(name: n, symbol: newSymbol, sortOrder: (categories.map(\.sortOrder).max() ?? -1) + 1))
         newName = ""
+        newSymbol = "tag"
     }
 
     private func delete(_ c: Category) { context.delete(c) }

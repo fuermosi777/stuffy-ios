@@ -45,7 +45,7 @@ struct PhotoThumb: View {
                 if let data, let img = UIImage(data: data) {
                     Image(uiImage: img).resizable().scaledToFit()
                 } else {
-                    Image(systemName: symbol).font(.system(size: size * 0.34)).foregroundStyle(Theme.secondary)
+                    SymbolIcon(name: symbol).font(.system(size: size * 0.34)).foregroundStyle(Theme.secondary)
                 }
             }
         .clipShape(RoundedRectangle(cornerRadius: radius, style: .continuous))
