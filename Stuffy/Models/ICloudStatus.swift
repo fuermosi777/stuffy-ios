@@ -18,6 +18,6 @@ final class ICloudStatus {
     }
 
     func refresh() async {
-        status = (try? await CKContainer(identifier: "iCloud.im.liuhao.Stuffy").accountStatus()) ?? .couldNotDetermine
+        status = (try? await CKContainer.default().accountStatus()) ?? .couldNotDetermine
     }
 }
