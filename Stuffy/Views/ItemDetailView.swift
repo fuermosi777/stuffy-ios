@@ -148,7 +148,7 @@ struct ItemDetailView: View {
     }
 
     @ViewBuilder private var dailyCard: some View {
-        if item.category != nil {
+        if let category = item.category {
             let isDriver = item.dailyOf != nil
             Card {
                 Toggle(isOn: Binding(
@@ -159,8 +159,9 @@ struct ItemDetailView: View {
                 )) {
                     VStack(alignment: .leading, spacing: 2) {
                         Label("Daily driver", systemImage: "sun.max.fill").font(.system(size: 15, weight: .semibold))
-                        Text(isDriver ? "Counts a wear every day. Turn off anytime."
-                             : "Count a wear every day automatically, with nothing to log.")
+                        Text(isDriver ? "Counts a wear every day. Switch or turn off anytime."
+                             : category.dailyItem.map { "Replaces \($0.name) as the daily driver for \(category.name)." }
+                                ?? "Count a wear every day automatically, with nothing to log.")
                             .font(.system(size: 13)).foregroundStyle(Theme.secondary)
                     }
                 }

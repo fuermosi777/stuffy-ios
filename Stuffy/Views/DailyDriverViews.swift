@@ -3,7 +3,7 @@ import SwiftData
 
 /// Home-screen reminder of which items are counting a wear every day.
 struct DailyDriverStrip: View {
-    let items: [Item]
+    let categories: [Category]
     var onTap: (Category) -> Void
 
     var body: some View {
@@ -11,15 +11,15 @@ struct DailyDriverStrip: View {
             HStack(spacing: 6) {
                 Image(systemName: "sun.max.fill").foregroundStyle(Theme.accent)
                 Text("Daily drivers").font(.system(size: 13, weight: .semibold)).textCase(.uppercase)
-                Text("· +1 wear a day, until you turn them off").font(.system(size: 13))
+                Text("· +1 wear a day, until you switch").font(.system(size: 13))
             }
             .foregroundStyle(Theme.secondary)
             .padding(.horizontal, 20)
 
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 10) {
-                    ForEach(items) { item in
-                        if let c = item.dailyOf {
+                    ForEach(categories) { c in
+                        if let item = c.dailyItem {
                             Button { onTap(c) } label: {
                                 Card {
                                     HStack(spacing: 10) {
@@ -31,7 +31,7 @@ struct DailyDriverStrip: View {
                                             Text("\(item.uses) wears").font(.system(size: 12)).monospacedDigit().foregroundStyle(Theme.secondary)
                                         }
                                         .lineLimit(1)
-                                        Image(systemName: "slider.horizontal.3").font(.system(size: 12, weight: .semibold))
+                                        Image(systemName: "arrow.left.arrow.right").font(.system(size: 12, weight: .semibold))
                                             .foregroundStyle(Theme.secondary)
                                     }
                                     .padding(10)
@@ -49,7 +49,7 @@ struct DailyDriverStrip: View {
     }
 }
 
-/// Turn daily drivers on or off for a category's items.
+/// Pick, switch or clear a category's daily driver.
 struct DailyDriverSheet: View {
     let category: Category
     @Environment(\.modelContext) private var context
@@ -64,25 +64,28 @@ struct DailyDriverSheet: View {
             List {
                 Section {
                     ForEach(candidates) { item in
-                        let on = item.dailyOf != nil
-                        Button {
-                            if on { DailyDriver.clear(item) } else { DailyDriver.assign(item, in: context) }
-                        } label: {
+                        Button { DailyDriver.assign(item, in: context); dismiss() } label: {
                             HStack(spacing: 12) {
                                 PhotoThumb(data: item.photoData, symbol: category.symbol, size: 40, radius: 10)
                                 Text(item.title).foregroundStyle(Theme.ink)
                                 Spacer()
-                                Image(systemName: on ? "checkmark.circle.fill" : "circle")
-                                    .foregroundStyle(on ? Theme.accent : Theme.secondary)
+                                if category.dailyItem === item { Image(systemName: "checkmark").foregroundStyle(Theme.accent) }
                             }
                         }
                     }
+                    Button { DailyDriver.clear(category); dismiss() } label: {
+                        HStack {
+                            Text("None").foregroundStyle(Theme.ink)
+                            Spacer()
+                            if category.dailyItem == nil { Image(systemName: "checkmark").foregroundStyle(Theme.accent) }
+                        }
+                    }
                 } footer: {
-                    Text("Daily drivers get a wear every calendar day until you turn them off. Logging one by hand just replaces its automatic wear for that day.")
+                    Text("The daily driver gets a wear every calendar day until you switch or clear it. Logging a different \(category.name.lowercased()) item by hand replaces that day.")
                 }
             }
-            .navigationTitle("\(category.name) daily drivers").navigationBarTitleDisplayMode(.inline)
-            .toolbar { ToolbarItem(placement: .confirmationAction) { Button("Done") { dismiss() } } }
+            .navigationTitle("\(category.name) daily driver").navigationBarTitleDisplayMode(.inline)
+            .toolbar { ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() } } }
         }
         .presentationDetents([.medium, .large])
     }
