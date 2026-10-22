@@ -22,9 +22,11 @@ struct ItemsView: View {
             .sorted { $0.idleDays() < $1.idleDays() }
     }
 
-    private var drivers: [Category] {
+    private var drivers: [Item] {
         guard query.isEmpty else { return [] }
-        return categories.filter { $0.dailyItem != nil && (filter == nil || filter == $0) }
+        return active
+            .filter { $0.dailyOf != nil && (filter == nil || $0.category == filter) }
+            .sorted { ($0.category?.sortOrder ?? 0, $0.title) < ($1.category?.sortOrder ?? 0, $1.title) }
     }
 
     private func matches(_ item: Item) -> Bool {
@@ -51,7 +53,7 @@ struct ItemsView: View {
                     }
                     .padding(.vertical, 14)
 
-                    if !drivers.isEmpty { DailyDriverStrip(categories: drivers) { switching = $0 } }
+                    if !drivers.isEmpty { DailyDriverStrip(items: drivers) { switching = $0 } }
 
                     if feed.isEmpty {
                         emptyState
@@ -101,7 +103,7 @@ struct ItemsView: View {
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
         toast = added
             ? Toast(title: "Logged a wear", subtitle: "\(item.name) · \(fmt(before)) → \(fmt(item.costPerUse))")
-            : Toast(title: "Already counted today", subtitle: "\(item.name) is the daily driver")
+            : Toast(title: "Already counted today", subtitle: "\(item.name) is a daily driver")
     }
 }
 

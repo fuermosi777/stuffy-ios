@@ -23,7 +23,7 @@ final class Item {
     var createdAt: Date = Date()
 
     var category: Category?
-    /// Set while this item is its category's daily driver (see `Category.dailyItem`).
+    /// Set while this item is one of its category's daily drivers (see `Category.dailyItems`).
     var dailyOf: Category?
     @Relationship(deleteRule: .cascade, inverse: \UsageLog.item) var logs: [UsageLog]?
 
