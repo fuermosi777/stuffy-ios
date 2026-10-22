@@ -96,9 +96,8 @@ struct Card<Content: View>: View {
     }
 }
 
-/// Downsizes picked photos so they sync cheaply.
-func loadPhoto(_ pick: PhotosPickerItem?) async -> Data? {
-    guard let raw = try? await pick?.loadTransferable(type: Data.self), let img = UIImage(data: raw) else { return nil }
+/// Downsizes photos so they sync cheaply.
+func downsized(_ img: UIImage) -> Data? {
     let maxSide: CGFloat = 1200
     let scale = min(1, maxSide / max(img.size.width, img.size.height))
     let size = CGSize(width: img.size.width * scale, height: img.size.height * scale)
@@ -106,12 +105,49 @@ func loadPhoto(_ pick: PhotosPickerItem?) async -> Data? {
     return resized.jpegData(compressionQuality: 0.8)
 }
 
+func loadPhoto(_ pick: PhotosPickerItem?) async -> Data? {
+    guard let raw = try? await pick?.loadTransferable(type: Data.self), let img = UIImage(data: raw) else { return nil }
+    return downsized(img)
+}
+
+/// System camera. Needs a device; the simulator has none.
+struct CameraPicker: UIViewControllerRepresentable {
+    static var isAvailable: Bool { UIImagePickerController.isSourceTypeAvailable(.camera) }
+    var onCapture: (UIImage) -> Void
+    @Environment(\.dismiss) private var dismiss
+
+    func makeUIViewController(context: Context) -> UIImagePickerController {
+        let picker = UIImagePickerController()
+        picker.sourceType = .camera
+        picker.delegate = context.coordinator
+        return picker
+    }
+    func updateUIViewController(_ vc: UIImagePickerController, context: Context) {}
+    func makeCoordinator() -> Coordinator { Coordinator(self) }
+
+    final class Coordinator: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+        let parent: CameraPicker
+        init(_ parent: CameraPicker) { self.parent = parent }
+        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
+            if let img = info[.originalImage] as? UIImage { parent.onCapture(img) }
+            parent.dismiss()
+        }
+        func imagePickerControllerDidCancel(_ picker: UIImagePickerController) { parent.dismiss() }
+    }
+}
+
 struct PhotoPickerField: View {
     @Binding var data: Data?
     @State private var pick: PhotosPickerItem?
+    @State private var choosing = false
+    @State private var showingLibrary = false
+    @State private var showingCamera = false
 
     var body: some View {
-        PhotosPicker(selection: $pick, matching: .images) {
+        Button {
+            // Without a camera there is nothing to choose between.
+            if CameraPicker.isAvailable { choosing = true } else { showingLibrary = true }
+        } label: {
             edgeColor(of: data)
                 .frame(height: 190)
                 .frame(maxWidth: .infinity)
@@ -130,6 +166,14 @@ struct PhotoPickerField: View {
             .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
         }
         .buttonStyle(.plain)
+        .confirmationDialog("Photo", isPresented: $choosing) {
+            Button("Take Photo") { showingCamera = true }
+            Button("Choose from Library") { showingLibrary = true }
+        }
+        .photosPicker(isPresented: $showingLibrary, selection: $pick, matching: .images)
+        .fullScreenCover(isPresented: $showingCamera) {
+            CameraPicker { img in data = downsized(img) }.ignoresSafeArea()
+        }
         .onChange(of: pick) { _, new in
             Task { if let d = await loadPhoto(new) { data = d } }
         }
