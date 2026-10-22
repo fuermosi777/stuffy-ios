@@ -10,6 +10,9 @@ struct InsightsView: View {
     @AppStorage("idleDays") private var idleThreshold = 45
     @State private var selected: Item?
     @State private var toast: Toast?
+    @State private var section: Section = .overview
+
+    private enum Section: String, CaseIterable { case overview = "Overview", calendar = "Calendar", years = "Years" }
 
     private var active: [Item] { allItems.filter(\.isActive) }
     private var sold: [Item] { allItems.filter { $0.status == .sold } }
@@ -38,13 +41,24 @@ struct InsightsView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
-                    Text("\(money(totalValue)) across \(active.count) items").font(.system(size: 14)).foregroundStyle(Theme.secondary)
-                    portfolioCard
-                    highlights
-                    ActivityCalendarView(items: allItems, wishlist: wishlist) { selected = $0 }
-                    categoryCard
-                    graveyard
-                    if !sold.isEmpty { recovered }
+                    Picker("Section", selection: $section) {
+                        ForEach(Section.allCases, id: \.self) { Text($0.rawValue).tag($0) }
+                    }
+                    .pickerStyle(.segmented)
+
+                    switch section {
+                    case .overview:
+                        Text("\(money(totalValue)) across \(active.count) items").font(.system(size: 14)).foregroundStyle(Theme.secondary)
+                        portfolioCard
+                        highlights
+                        categoryCard
+                        graveyard
+                        if !sold.isEmpty { recovered }
+                    case .calendar:
+                        ActivityCalendarView(items: allItems, wishlist: wishlist) { selected = $0 }
+                    case .years:
+                        YearlyView(items: allItems) { selected = $0 }
+                    }
                 }
                 .padding(16)
             }
