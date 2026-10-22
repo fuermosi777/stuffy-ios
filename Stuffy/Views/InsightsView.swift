@@ -162,7 +162,7 @@ struct InsightsView: View {
                         .buttonStyle(.plain)
                         HStack(spacing: 8) {
                             action("Wear it", Theme.sageBg, Theme.sageFg) {
-                                context.insert(UsageLog(item: item))
+                                item.logWear(in: context)
                                 toast = Toast(title: "Back in rotation", subtitle: item.name)
                             }
                             action("Retire", Theme.chip, Theme.ink) { item.status = .retired; item.endedDate = Date() }

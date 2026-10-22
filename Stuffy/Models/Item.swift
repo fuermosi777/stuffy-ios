@@ -23,6 +23,8 @@ final class Item {
     var createdAt: Date = Date()
 
     var category: Category?
+    /// Set while this item is its category's daily driver (see `Category.dailyItem`).
+    var dailyOf: Category?
     @Relationship(deleteRule: .cascade, inverse: \UsageLog.item) var logs: [UsageLog]?
 
     init(brand: String, name: String, price: Double, purchaseDate: Date = Date(),
@@ -78,10 +80,13 @@ final class Item {
 @Model
 final class UsageLog {
     var date: Date = Date()
+    /// Counted by the category's daily driver rather than logged by hand.
+    var isAuto: Bool = false
     var item: Item?
 
-    init(date: Date = Date(), item: Item? = nil) {
+    init(date: Date = Date(), item: Item? = nil, isAuto: Bool = false) {
         self.date = date
         self.item = item
+        self.isAuto = isAuto
     }
 }

@@ -10,6 +10,7 @@ struct ItemsView: View {
     @State private var query = ""
     @State private var selected: Item?
     @State private var showingAdd = false
+    @State private var switching: Category?
     @State private var toast: Toast?
 
     private var active: [Item] { allItems.filter(\.isActive) }
@@ -19,6 +20,11 @@ struct ItemsView: View {
             .filter { filter == nil || $0.category == filter }
             .filter { matches($0) }
             .sorted { $0.idleDays() < $1.idleDays() }
+    }
+
+    private var drivers: [Category] {
+        guard query.isEmpty else { return [] }
+        return categories.filter { $0.dailyItem != nil && (filter == nil || filter == $0) }
     }
 
     private func matches(_ item: Item) -> Bool {
@@ -45,6 +51,8 @@ struct ItemsView: View {
                     }
                     .padding(.vertical, 14)
 
+                    if !drivers.isEmpty { DailyDriverStrip(categories: drivers) { switching = $0 } }
+
                     if feed.isEmpty {
                         emptyState
                     } else {
@@ -66,6 +74,7 @@ struct ItemsView: View {
             }
             .sheet(item: $selected) { ItemDetailView(item: $0) }
             .sheet(isPresented: $showingAdd) { ItemFormView(item: nil) }
+            .sheet(item: $switching) { DailyDriverSheet(category: $0) }
             .toast($toast)
         }
     }
@@ -88,10 +97,11 @@ struct ItemsView: View {
 
     private func log(_ item: Item) {
         let before = item.costPerUse
-        context.insert(UsageLog(item: item))
-        let after = item.netCost / Double(item.uses + 1)
+        let added = item.logWear(in: context)
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
-        toast = Toast(title: "Logged a wear", subtitle: "\(item.name) · \(fmt(before)) → \(fmt(after))")
+        toast = added
+            ? Toast(title: "Logged a wear", subtitle: "\(item.name) · \(fmt(before)) → \(fmt(item.costPerUse))")
+            : Toast(title: "Already counted today", subtitle: "\(item.name) is the daily driver")
     }
 }
 
@@ -107,8 +117,14 @@ struct ItemRow: View {
                 HStack(spacing: 14) {
                     PhotoThumb(data: item.photoData, symbol: item.category?.symbol ?? "photo", size: 68)
                     VStack(alignment: .leading, spacing: 3) {
-                        Text(item.brand.uppercased()).font(.system(size: 11, weight: .semibold)).tracking(0.4)
-                            .foregroundStyle(Theme.secondary).lineLimit(1)
+                        HStack(spacing: 5) {
+                            Text(item.brand.uppercased()).font(.system(size: 11, weight: .semibold)).tracking(0.4)
+                                .foregroundStyle(Theme.secondary).lineLimit(1)
+                            if item.dailyOf != nil {
+                                Label("Daily", systemImage: "sun.max.fill").font(.system(size: 11, weight: .semibold))
+                                    .foregroundStyle(Theme.accent).fixedSize()
+                            }
+                        }
                         Text(item.name).font(.system(size: 16, weight: .semibold)).foregroundStyle(Theme.ink).lineLimit(1)
                         Text("\(item.uses) wears")
                             .font(.system(size: 13)).monospacedDigit().foregroundStyle(bump ? Theme.sageFg : Theme.secondary)

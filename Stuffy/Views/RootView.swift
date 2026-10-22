@@ -22,10 +22,12 @@ struct RootView: View {
             // Wait briefly for a first sync so a second device doesn't re-seed the defaults.
             if icloud.isAvailable { try? await Task.sleep(for: .seconds(3)) }
             Category.seedIfNeeded(in: context)
+            DailyDriver.reconcile(in: context)
         }
         .onChange(of: categories.count) { Category.mergeDuplicates(in: context) }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
             Task { await icloud.refresh() }
+            DailyDriver.reconcile(in: context)
         }
     }
 

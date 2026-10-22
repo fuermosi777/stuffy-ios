@@ -20,7 +20,7 @@ struct ItemDetailView: View {
                         header
                         statsGrid
                         progressCard
-                        if item.isActive { logButton } else { endedBanner }
+                        if item.isActive { logButton; dailyCard } else { endedBanner }
                         metaCard
                         notesCard
                         historyCard
@@ -138,12 +138,35 @@ struct ItemDetailView: View {
 
     private var logButton: some View {
         Button {
-            context.insert(UsageLog(item: item))
+            item.logWear(in: context)
             UIImpactFeedbackGenerator(style: .medium).impactOccurred()
         } label: {
             Label("Log a wear", systemImage: "plus").font(.system(size: 17, weight: .semibold))
                 .frame(maxWidth: .infinity).frame(height: 52)
                 .foregroundStyle(.white).background(Theme.accent, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+        }
+    }
+
+    @ViewBuilder private var dailyCard: some View {
+        if let category = item.category {
+            let isDriver = item.dailyOf != nil
+            Card {
+                Toggle(isOn: Binding(
+                    get: { item.dailyOf != nil },
+                    set: { on in
+                        if on { DailyDriver.assign(item, in: context) } else { DailyDriver.clear(item) }
+                    }
+                )) {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Label("Daily driver", systemImage: "sun.max.fill").font(.system(size: 15, weight: .semibold))
+                        Text(isDriver ? "Counts a wear every day. Switch or turn off anytime."
+                             : category.dailyItem.map { "Replaces \($0.name) as the daily driver for \(category.name)." }
+                                ?? "Count a wear every day automatically, with nothing to log.")
+                            .font(.system(size: 13)).foregroundStyle(Theme.secondary)
+                    }
+                }
+                .padding(16)
+            }
         }
     }
 
@@ -206,7 +229,9 @@ struct ItemDetailView: View {
                         ForEach(Array(logs.prefix(20).enumerated()), id: \.element.persistentModelID) { i, log in
                             if i > 0 { Divider() }
                             HStack {
-                                Text(log.date.formatted(date: .abbreviated, time: .shortened)).font(.system(size: 15))
+                                Text(log.date.formatted(log.isAuto ? .dateTime.month(.abbreviated).day().year() : .dateTime.month(.abbreviated).day().year().hour().minute()))
+                                    .font(.system(size: 15))
+                                if log.isAuto { Pill(text: "Daily", background: Theme.chip, foreground: Theme.secondary) }
                                 Spacer()
                                 Button(role: .destructive) { context.delete(log) } label: { Image(systemName: "minus.circle") }
                                     .accessibilityLabel("Delete this wear")
@@ -234,6 +259,7 @@ struct ItemDetailView: View {
     }
 
     private func end(_ status: ItemStatus) {
+        DailyDriver.clear(item)
         item.status = status
         item.endedDate = Date()
         dismiss()
@@ -275,6 +301,7 @@ struct SellSheet: View {
                 ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() } }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
+                        DailyDriver.clear(item)
                         item.resalePrice = resale
                         item.endedDate = date
                         item.status = .sold

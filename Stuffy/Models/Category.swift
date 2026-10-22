@@ -8,6 +8,10 @@ final class Category {
     var sortOrder: Int = 0
 
     @Relationship(deleteRule: .nullify, inverse: \Item.category) var items: [Item]?
+    /// The one item worn every day; it earns a wear per calendar day. See `DailyDriver`.
+    @Relationship(deleteRule: .nullify, inverse: \Item.dailyOf) var dailyItem: Item?
+    /// First day the daily driver hasn't been credited for yet.
+    var dailyCursor: Date?
     @Relationship(deleteRule: .nullify, inverse: \WishlistItem.category) var wishes: [WishlistItem]?
 
     init(name: String, symbol: String = "tag", sortOrder: Int = 0) {
