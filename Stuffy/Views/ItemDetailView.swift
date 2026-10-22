@@ -50,15 +50,17 @@ struct ItemDetailView: View {
     // MARK: Sections
 
     private var hero: some View {
-        ZStack {
-            Theme.chip
-            if let d = item.photoData, let img = UIImage(data: d) {
-                Image(uiImage: img).resizable().scaledToFill()
-            } else {
-                Image(systemName: item.category?.symbol ?? "photo").font(.system(size: 54)).foregroundStyle(Theme.secondary)
+        // Size comes from the clear base, so a wide photo can't push the layout wider than the screen.
+        edgeColor(of: item.photoData)
+            .frame(height: 260).frame(maxWidth: .infinity)
+            .overlay {
+                if let d = item.photoData, let img = UIImage(data: d) {
+                    Image(uiImage: img).resizable().scaledToFit()
+                } else {
+                    Image(systemName: item.category?.symbol ?? "photo").font(.system(size: 54)).foregroundStyle(Theme.secondary)
+                }
             }
-        }
-        .frame(height: 260).frame(maxWidth: .infinity).clipped()
+            .clipped()
     }
 
     private var header: some View {

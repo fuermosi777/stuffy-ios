@@ -1,6 +1,36 @@
 import SwiftUI
 import PhotosUI
 
+private let edgeColorCache = NSCache<NSNumber, UIColor>()
+
+/// Average colour of the image's outer pixel ring, so letterboxing blends with the photo's own backdrop.
+func edgeColor(of data: Data?) -> Color {
+    guard let data else { return Theme.chip }
+    let key = NSNumber(value: data.hashValue)
+    if let hit = edgeColorCache.object(forKey: key) { return Color(hit) }
+    guard let cg = UIImage(data: data)?.cgImage else { return Theme.chip }
+    let n = 16
+    var px = [UInt8](repeating: 0, count: n * n * 4)
+    let ok = px.withUnsafeMutableBytes { buf -> Bool in
+        guard let ctx = CGContext(data: buf.baseAddress, width: n, height: n, bitsPerComponent: 8, bytesPerRow: n * 4,
+                                  space: CGColorSpaceCreateDeviceRGB(),
+                                  bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) else { return false }
+        ctx.draw(cg, in: CGRect(x: 0, y: 0, width: n, height: n))
+        return true
+    }
+    guard ok else { return Theme.chip }
+    var sum = [Int](repeating: 0, count: 3), count = 0
+    for y in 0..<n { for x in 0..<n where x == 0 || y == 0 || x == n - 1 || y == n - 1 {
+        let i = (y * n + x) * 4
+        for c in 0..<3 { sum[c] += Int(px[i + c]) }
+        count += 1
+    } }
+    let ui = UIColor(red: CGFloat(sum[0]) / CGFloat(count * 255), green: CGFloat(sum[1]) / CGFloat(count * 255),
+                     blue: CGFloat(sum[2]) / CGFloat(count * 255), alpha: 1)
+    edgeColorCache.setObject(ui, forKey: key)
+    return Color(ui)
+}
+
 /// Square thumbnail; falls back to the category symbol.
 struct PhotoThumb: View {
     var data: Data?
@@ -9,15 +39,15 @@ struct PhotoThumb: View {
     var radius: CGFloat = 14
 
     var body: some View {
-        ZStack {
-            Theme.chip
-            if let data, let img = UIImage(data: data) {
-                Image(uiImage: img).resizable().scaledToFill()
-            } else {
-                Image(systemName: symbol).font(.system(size: size * 0.34)).foregroundStyle(Theme.secondary)
+        edgeColor(of: data)
+            .frame(width: size, height: size)
+            .overlay {
+                if let data, let img = UIImage(data: data) {
+                    Image(uiImage: img).resizable().scaledToFit()
+                } else {
+                    Image(systemName: symbol).font(.system(size: size * 0.34)).foregroundStyle(Theme.secondary)
+                }
             }
-        }
-        .frame(width: size, height: size)
         .clipShape(RoundedRectangle(cornerRadius: radius, style: .continuous))
     }
 }
@@ -82,21 +112,21 @@ struct PhotoPickerField: View {
 
     var body: some View {
         PhotosPicker(selection: $pick, matching: .images) {
-            ZStack {
-                Theme.chip
-                if let data, let img = UIImage(data: data) {
-                    Image(uiImage: img).resizable().scaledToFill()
-                } else {
-                    VStack(spacing: 8) {
-                        Image(systemName: "camera").font(.system(size: 20))
-                            .frame(width: 48, height: 48).background(.white, in: Circle())
-                        Text("Add photo").font(.system(size: 15, weight: .semibold))
+            edgeColor(of: data)
+                .frame(height: 190)
+                .frame(maxWidth: .infinity)
+                .overlay {
+                    if let data, let img = UIImage(data: data) {
+                        Image(uiImage: img).resizable().scaledToFit()
+                    } else {
+                        VStack(spacing: 8) {
+                            Image(systemName: "camera").font(.system(size: 20))
+                                .frame(width: 48, height: 48).background(.white, in: Circle())
+                            Text("Add photo").font(.system(size: 15, weight: .semibold))
+                        }
+                        .foregroundStyle(Color(hex: 0x55524C))
                     }
-                    .foregroundStyle(Color(hex: 0x55524C))
                 }
-            }
-            .frame(height: 190)
-            .frame(maxWidth: .infinity)
             .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
         }
         .buttonStyle(.plain)
