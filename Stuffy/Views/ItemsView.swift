@@ -111,6 +111,9 @@ struct ItemRow: View {
     var onLog: () -> Void
     @State private var bump = false
 
+    private var today: Int { item.wearsToday() }
+    private var done: Bool { bump || today > 0 }
+
     var body: some View {
         HStack(spacing: 14) {
             Button(action: onOpen) {
@@ -145,13 +148,18 @@ struct ItemRow: View {
                 withAnimation(.spring(duration: 0.35, bounce: 0.5)) { bump = true }
                 Task { try? await Task.sleep(for: .milliseconds(700)); withAnimation { bump = false } }
             } label: {
-                Image(systemName: bump ? "checkmark" : "plus")
-                    .font(.system(size: 15, weight: .bold))
-                    .foregroundStyle(bump ? Theme.sageFg : Theme.ink)
-                    .frame(width: 40, height: 40)
-                    .background(bump ? Theme.sageBg : Color(hex: 0xF2F0EB), in: Circle())
+                Group {
+                    if today > 1 {
+                        Text("\(today)").font(.system(size: 15, weight: .bold)).monospacedDigit()
+                    } else {
+                        Image(systemName: done ? "checkmark" : "plus").font(.system(size: 15, weight: .bold))
+                    }
+                }
+                .foregroundStyle(done ? Theme.sageFg : Theme.ink)
+                .frame(width: 40, height: 40)
+                .background(done ? Theme.sageBg : Color(hex: 0xF2F0EB), in: Circle())
             }
-            .accessibilityLabel("Log a wear")
+            .accessibilityLabel(today > 0 ? "Worn \(today) today. Log another wear" : "Log a wear")
         }
         .padding(.horizontal, 20).padding(.vertical, 12)
     }

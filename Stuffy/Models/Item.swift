@@ -47,6 +47,10 @@ final class Item {
     var title: String { brand.isEmpty ? name : "\(brand) \(name)" }
 
     var uses: Int { initialUses + (logs?.count ?? 0) }
+    /// Wears counted today, manual and daily-driver alike.
+    func wearsToday(now: Date = Date()) -> Int {
+        (logs ?? []).filter { Calendar.current.isDate($0.date, inSameDayAs: now) }.count
+    }
     var sortedLogs: [UsageLog] { (logs ?? []).sorted { $0.date > $1.date } }
 
     var lastUsed: Date? {
