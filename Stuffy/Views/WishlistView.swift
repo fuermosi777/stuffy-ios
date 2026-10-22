@@ -9,6 +9,7 @@ struct WishlistView: View {
     @AppStorage("defaultTarget") private var defaultTarget = 2.0
     @AppStorage("smartGuard") private var smartGuard = true
     @State private var showingAdd = false
+    @State private var editing: WishlistItem?
     @State private var toast: Toast?
 
     private var waiting: [WishlistItem] {
@@ -38,6 +39,7 @@ struct WishlistView: View {
                 ToolbarItem(placement: .topBarTrailing) { Button { showingAdd = true } label: { Image(systemName: "plus") } }
             }
             .sheet(isPresented: $showingAdd) { WishFormView() }
+            .sheet(item: $editing) { WishFormView(wish: $0) }
             .toast($toast)
         }
     }
@@ -62,13 +64,20 @@ struct WishlistView: View {
         return Card {
             VStack(alignment: .leading, spacing: 12) {
                 HStack(spacing: 14) {
-                    PhotoThumb(data: w.photoData, symbol: w.category?.symbol ?? "photo", size: 64)
-                    VStack(alignment: .leading, spacing: 3) {
-                        Text(w.brand.uppercased()).font(.system(size: 11, weight: .semibold)).tracking(0.4).foregroundStyle(Theme.secondary)
-                        Text(w.name).font(.system(size: 16, weight: .semibold)).lineLimit(2)
-                        Text(money(w.price)).font(.system(size: 15)).monospacedDigit().foregroundStyle(Theme.secondary)
+                    Button { editing = w } label: {
+                        HStack(spacing: 14) {
+                            PhotoThumb(data: w.photoData, symbol: w.category?.symbol ?? "photo", size: 64)
+                            VStack(alignment: .leading, spacing: 3) {
+                                Text(w.brand.uppercased()).font(.system(size: 11, weight: .semibold)).tracking(0.4).foregroundStyle(Theme.secondary)
+                                Text(w.name).font(.system(size: 16, weight: .semibold)).foregroundStyle(Theme.ink).lineLimit(2)
+                                Text(money(w.price)).font(.system(size: 15)).monospacedDigit().foregroundStyle(Theme.secondary)
+                            }
+                            Spacer(minLength: 0)
+                        }
+                        .contentShape(Rectangle())
                     }
-                    Spacer(minLength: 0)
+                    .buttonStyle(.plain)
+                    .accessibilityHint("Edit")
                     ring(progress: Double(total - left) / Double(total), left: left, ready: ready)
                 }
                 Label(ready ? "Hold complete · still want it?" : "\(left) days left of \(total)-day hold",
@@ -96,7 +105,10 @@ struct WishlistView: View {
             }
             .padding(16)
         }
-        .contextMenu { Button("Delete", role: .destructive) { context.delete(w) } }
+        .contextMenu {
+            Button { editing = w } label: { Label("Edit", systemImage: "pencil") }
+            Button("Delete", role: .destructive) { context.delete(w) }
+        }
     }
 
     private func ring(progress: Double, left: Int, ready: Bool) -> some View {
@@ -144,15 +156,26 @@ struct WishlistView: View {
     }
 }
 
+/// Adds a wish, or edits `wish` when given. Editing keeps the hold-period start date.
 struct WishFormView: View {
+    var wish: WishlistItem?
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
     @Query(sort: \Category.sortOrder) private var categories: [Category]
     @State private var photo: Data?
-    @State private var brand = ""
-    @State private var name = ""
-    @State private var priceText = ""
+    @State private var brand: String
+    @State private var name: String
+    @State private var priceText: String
     @State private var category: Category?
+
+    init(wish: WishlistItem? = nil) {
+        self.wish = wish
+        _photo = State(initialValue: wish?.photoData)
+        _brand = State(initialValue: wish?.brand ?? "")
+        _name = State(initialValue: wish?.name ?? "")
+        _priceText = State(initialValue: wish.map { $0.price == $0.price.rounded() ? String(Int($0.price)) : String(format: "%.2f", $0.price) } ?? "")
+        _category = State(initialValue: wish?.category)
+    }
 
     private var price: Double { Double(priceText) ?? 0 }
 
@@ -176,19 +199,24 @@ struct WishFormView: View {
                 }
             }
             .scrollContentBackground(.hidden).background(Theme.grouped)
-            .navigationTitle("New Wish").navigationBarTitleDisplayMode(.inline)
+            .navigationTitle(wish == nil ? "New Wish" : "Edit Wish").navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() } }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Add") {
-                        context.insert(WishlistItem(brand: brand.trimmingCharacters(in: .whitespaces), name: name.trimmingCharacters(in: .whitespaces),
-                                                    price: price, category: category, photoData: photo))
+                    Button(wish == nil ? "Add" : "Save") {
+                        let brand = brand.trimmingCharacters(in: .whitespaces), name = name.trimmingCharacters(in: .whitespaces)
+                        if let wish {
+                            wish.brand = brand; wish.name = name; wish.price = price
+                            wish.category = category; wish.photoData = photo
+                        } else {
+                            context.insert(WishlistItem(brand: brand, name: name, price: price, category: category, photoData: photo))
+                        }
                         dismiss()
                     }
                     .disabled(name.trimmingCharacters(in: .whitespaces).isEmpty || price <= 0).fontWeight(.semibold)
                 }
             }
-            .onAppear { category = category ?? categories.first }
+            .onAppear { if wish == nil { category = category ?? categories.first } }
         }
     }
 }
