@@ -26,6 +26,7 @@ struct ItemWaterfall: View {
     let items: [Item]
     var onOpen: (Item) -> Void
     var onLog: (Item) -> Void
+    var onDuplicate: (Item) -> Void
 
     private var columns: [[Item]] {
         var cols: [[Item]] = [[], []]
@@ -44,6 +45,9 @@ struct ItemWaterfall: View {
                 LazyVStack(spacing: 12) {
                     ForEach(col) { item in
                         ItemCard(item: item, onOpen: { onOpen(item) }, onLog: { onLog(item) })
+                            .contextMenu {
+                                Button { onDuplicate(item) } label: { Label("Duplicate", systemImage: "plus.square.on.square") }
+                            }
                     }
                 }
             }

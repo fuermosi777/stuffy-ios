@@ -10,6 +10,7 @@ struct ItemsView: View {
     @State private var query = ""
     @State private var selected: Item?
     @State private var showingAdd = false
+    @State private var duplicating: Item?
     @State private var switching: Category?
     @State private var toast: Toast?
     @AppStorage("homeLayout") private var grid = false
@@ -57,10 +58,13 @@ struct ItemsView: View {
                     if feed.isEmpty {
                         emptyState
                     } else if grid {
-                        ItemWaterfall(items: feed, onOpen: { selected = $0 }, onLog: { log($0) })
+                        ItemWaterfall(items: feed, onOpen: { selected = $0 }, onLog: { log($0) }, onDuplicate: { duplicating = $0 })
                     } else {
                         ForEach(feed) { item in
                             ItemRow(item: item, onOpen: { selected = item }, onLog: { log(item) })
+                                .contextMenu {
+                                    Button { duplicating = item } label: { Label("Duplicate", systemImage: "plus.square.on.square") }
+                                }
                             Divider().padding(.leading, 96)
                         }
                     }
@@ -83,16 +87,19 @@ struct ItemsView: View {
             }
             .sheet(item: $selected) { ItemDetailView(item: $0) }
             .sheet(isPresented: $showingAdd) { ItemFormView(item: nil) }
+            .sheet(item: $duplicating) { ItemFormView(item: nil, template: $0) }
             .sheet(item: $switching) { DailyDriverSheet(category: $0) }
             .toast($toast)
         }
     }
 
     private var summary: String {
-        let scoped = active.filter { filter == nil || $0.category == filter }
-        let value = scoped.reduce(0) { $0 + $1.netCost }
-        let uses = scoped.reduce(0) { $0 + $1.uses }
-        return "\(scoped.count) items · \(money(value)) total · \(fmt(value / Double(max(1, uses)))) avg per wear"
+        let value = feed.reduce(0) { $0 + $1.netCost }
+        let uses = feed.reduce(0) { $0 + $1.uses }
+        let narrowed = filter != nil || !query.trimmingCharacters(in: .whitespaces).isEmpty
+        if narrowed && feed.isEmpty { return "No matches" }
+        let count = narrowed ? "\(feed.count) of \(active.count)" : "\(feed.count)"
+        return "\(count) items · \(money(value)) total · \(fmt(value / Double(max(1, uses)))) avg per wear"
     }
 
     private var emptyState: some View {

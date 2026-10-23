@@ -1,9 +1,10 @@
 import SwiftUI
 import SwiftData
 
-/// Add (item == nil) or edit an item.
+/// Add (item == nil) or edit an item. With `template`, adds a new item prefilled from an existing one.
 struct ItemFormView: View {
     let item: Item?
+    var template: Item? = nil
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
     @Query(sort: \Category.sortOrder) private var categories: [Category]
@@ -82,7 +83,7 @@ struct ItemFormView: View {
             }
             .scrollContentBackground(.hidden)
             .background(Theme.grouped)
-            .navigationTitle(item == nil ? "New Item" : "Edit Item")
+            .navigationTitle(item == nil ? (template == nil ? "New Item" : "Duplicate Item") : "Edit Item")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() } }
@@ -112,14 +113,16 @@ struct ItemFormView: View {
         loaded = true
         target = defaultTarget
         category = categories.first
-        guard let item else { return }
+        guard let item = item ?? template else { return }
         photo = item.photoData
         brand = item.brand
         name = item.name
         category = item.category
         priceText = item.price.formatted(.number.grouping(.never).precision(.fractionLength(0...2)))
-        date = item.purchaseDate
-        usedSoFar = item.initialUses
+        if self.item != nil {
+            date = item.purchaseDate
+            usedSoFar = item.initialUses
+        }
         target = item.targetCostPerUse
         notes = item.notes
     }

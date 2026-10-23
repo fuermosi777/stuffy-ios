@@ -7,6 +7,7 @@ struct ItemDetailView: View {
     @Environment(\.dismiss) private var dismiss
 
     @State private var showingEdit = false
+    @State private var showingDuplicate = false
     @State private var showingSell = false
     @State private var confirmRetire = false
     @State private var confirmDelete = false
@@ -35,6 +36,7 @@ struct ItemDetailView: View {
                 ToolbarItem(placement: .primaryAction) { menu }
             }
             .sheet(isPresented: $showingEdit) { ItemFormView(item: item) }
+            .sheet(isPresented: $showingDuplicate) { ItemFormView(item: nil, template: item) }
             .sheet(isPresented: $showingSell) { SellSheet(item: item) { dismiss() } }
             .confirmationDialog("Retire \(item.name)?", isPresented: $confirmRetire, titleVisibility: .visible) {
                 Button("Retire") { end(.retired) }
@@ -248,6 +250,7 @@ struct ItemDetailView: View {
     private var menu: some View {
         Menu {
             Button { showingEdit = true } label: { Label("Edit", systemImage: "pencil") }
+            Button { showingDuplicate = true } label: { Label("Duplicate", systemImage: "plus.square.on.square") }
             if item.isActive {
                 Button { showingSell = true } label: { Label("Mark as sold", systemImage: "arrow.3.trianglepath") }
                 Button { confirmRetire = true } label: { Label("Retire", systemImage: "archivebox") }
