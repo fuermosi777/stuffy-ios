@@ -27,6 +27,7 @@ struct ItemWaterfall: View {
     var onOpen: (Item) -> Void
     var onLog: (Item) -> Void
     var onDuplicate: (Item) -> Void
+    var onToggleDaily: (Item) -> Void
 
     private var columns: [[Item]] {
         var cols: [[Item]] = [[], []]
@@ -47,6 +48,7 @@ struct ItemWaterfall: View {
                         ItemCard(item: item, onOpen: { onOpen(item) }, onLog: { onLog(item) })
                             .contextMenu {
                                 Button { onDuplicate(item) } label: { Label("Duplicate", systemImage: "plus.square.on.square") }
+                                DailyDriverMenuButton(item: item) { onToggleDaily(item) }
                             }
                     }
                 }
@@ -123,5 +125,23 @@ struct ItemCard: View {
         }
         .background(Color(.secondarySystemGroupedBackground))
         .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+    }
+}
+
+/// Long-press action: mark as, or unmark, its category's daily driver. Hidden for uncategorized items.
+struct DailyDriverMenuButton: View {
+    let item: Item
+    var action: () -> Void
+
+    var body: some View {
+        if item.category != nil {
+            Button(action: action) {
+                if item.dailyOf != nil {
+                    Label("Unmark daily driver", systemImage: "sun.max")
+                } else {
+                    Label("Mark as daily driver", systemImage: "sun.max.fill")
+                }
+            }
+        }
     }
 }

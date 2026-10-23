@@ -58,12 +58,13 @@ struct ItemsView: View {
                     if feed.isEmpty {
                         emptyState
                     } else if grid {
-                        ItemWaterfall(items: feed, onOpen: { selected = $0 }, onLog: { log($0) }, onDuplicate: { duplicating = $0 })
+                        ItemWaterfall(items: feed, onOpen: { selected = $0 }, onLog: { log($0) }, onDuplicate: { duplicating = $0 }, onToggleDaily: { toggleDaily($0) })
                     } else {
                         ForEach(feed) { item in
                             ItemRow(item: item, onOpen: { selected = item }, onLog: { log(item) })
                                 .contextMenu {
                                     Button { duplicating = item } label: { Label("Duplicate", systemImage: "plus.square.on.square") }
+                                    DailyDriverMenuButton(item: item) { toggleDaily(item) }
                                 }
                             Divider().padding(.leading, 96)
                         }
@@ -110,6 +111,16 @@ struct ItemsView: View {
                 .font(.subheadline).foregroundStyle(Theme.secondary)
         }
         .frame(maxWidth: .infinity).padding(.top, 80)
+    }
+
+    private func toggleDaily(_ item: Item) {
+        if item.dailyOf != nil {
+            DailyDriver.clear(item)
+            toast = Toast(title: "Daily driver off", subtitle: item.name)
+        } else {
+            DailyDriver.assign(item, in: context)
+            toast = Toast(title: "Daily driver set", subtitle: "\(item.name) · counts a wear every day")
+        }
     }
 
     private func log(_ item: Item) {
