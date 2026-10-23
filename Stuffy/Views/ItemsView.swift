@@ -42,9 +42,9 @@ struct ItemsView: View {
 
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 8) {
-                            CategoryChip(label: "All", selected: filter == nil) { filter = nil }
+                            CategoryChip(label: "All", symbol: "square.grid.2x2", selected: filter == nil) { filter = nil }
                             ForEach(categories) { c in
-                                CategoryChip(label: c.name, selected: filter == c) { filter = c }
+                                CategoryChip(label: c.name, symbol: c.symbol, selected: filter == c) { filter = c }
                             }
                         }
                         .padding(.horizontal, 20)
@@ -80,9 +80,10 @@ struct ItemsView: View {
     }
 
     private var summary: String {
-        let value = active.reduce(0) { $0 + $1.netCost }
-        let uses = active.reduce(0) { $0 + $1.uses }
-        return "\(active.count) items · \(fmt(value / Double(max(1, uses)))) avg per wear"
+        let scoped = active.filter { filter == nil || $0.category == filter }
+        let value = scoped.reduce(0) { $0 + $1.netCost }
+        let uses = scoped.reduce(0) { $0 + $1.uses }
+        return "\(scoped.count) items · \(fmt(value / Double(max(1, uses)))) avg per wear"
     }
 
     private var emptyState: some View {

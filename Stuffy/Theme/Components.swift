@@ -71,12 +71,16 @@ struct Pill: View {
 
 struct CategoryChip: View {
     var label: String
+    var symbol: String? = nil
     var selected: Bool
     var action: () -> Void
 
     var body: some View {
         Button(action: action) {
-            Text(label)
+            HStack(spacing: 6) {
+                if let symbol { SymbolIcon(name: symbol).font(.system(size: 14)) }
+                Text(label)
+            }
                 .font(.system(size: 15, weight: .semibold))
                 .padding(.horizontal, 15)
                 .frame(height: 34)
