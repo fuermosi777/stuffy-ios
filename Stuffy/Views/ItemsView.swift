@@ -83,7 +83,7 @@ struct ItemsView: View {
         let scoped = active.filter { filter == nil || $0.category == filter }
         let value = scoped.reduce(0) { $0 + $1.netCost }
         let uses = scoped.reduce(0) { $0 + $1.uses }
-        return "\(scoped.count) items · \(fmt(value / Double(max(1, uses)))) avg per wear"
+        return "\(scoped.count) items · \(money(value)) total · \(fmt(value / Double(max(1, uses)))) avg per wear"
     }
 
     private var emptyState: some View {
