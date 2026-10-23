@@ -12,6 +12,7 @@ struct ItemsView: View {
     @State private var showingAdd = false
     @State private var switching: Category?
     @State private var toast: Toast?
+    @AppStorage("homeLayout") private var grid = false
 
     private var active: [Item] { allItems.filter(\.isActive) }
 
@@ -55,6 +56,8 @@ struct ItemsView: View {
 
                     if feed.isEmpty {
                         emptyState
+                    } else if grid {
+                        ItemWaterfall(items: feed, onOpen: { selected = $0 }, onLog: { log($0) })
                     } else {
                         ForEach(feed) { item in
                             ItemRow(item: item, onOpen: { selected = item }, onLog: { log(item) })
@@ -67,6 +70,12 @@ struct ItemsView: View {
             .navigationTitle("Stuffy")
             .searchable(text: $query, prompt: "Search your stuff")
             .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button { withAnimation(.snappy) { grid.toggle() } } label: {
+                        Image(systemName: grid ? "list.bullet" : "square.grid.2x2")
+                    }
+                    .accessibilityLabel(grid ? "Show as list" : "Show as grid")
+                }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button { showingAdd = true } label: { Image(systemName: "plus") }
                         .accessibilityLabel("Add item")
