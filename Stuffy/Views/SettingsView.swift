@@ -78,6 +78,7 @@ struct SettingsView: View {
                 Section("Library") {
                     NavigationLink("Categories") { CategoriesView() }
                     NavigationLink("Archive") { ArchiveView() }
+                    NavigationLink("Declined wishes") { DeclinedListView() }
                     ShareLink(item: csvURL()) { Label("Export CSV", systemImage: "square.and.arrow.up") }
                 }
             }

@@ -3,6 +3,12 @@ import SwiftUI
 struct Toast: Equatable {
     var title: String
     var subtitle: String
+    var actionTitle: String?
+    var action: (() -> Void)?
+
+    static func == (a: Toast, b: Toast) -> Bool {
+        a.title == b.title && a.subtitle == b.subtitle && a.actionTitle == b.actionTitle
+    }
 }
 
 extension View {
@@ -17,6 +23,13 @@ extension View {
                         Text(t.subtitle).font(.system(size: 13)).opacity(0.75).lineLimit(1)
                     }
                     Spacer(minLength: 0)
+                    if let label = t.actionTitle, let action = t.action {
+                        Button(label) {
+                            action()
+                            withAnimation { toast.wrappedValue = nil }
+                        }
+                        .font(.system(size: 15, weight: .semibold))
+                    }
                 }
                 .foregroundStyle(.white)
                 .padding(.horizontal, 16).padding(.vertical, 12)
@@ -24,7 +37,7 @@ extension View {
                 .padding(.horizontal, 16).padding(.top, 8)
                 .transition(.move(edge: .top).combined(with: .opacity))
                 .task(id: t) {
-                    try? await Task.sleep(for: .seconds(2.3))
+                    try? await Task.sleep(for: .seconds(t.action == nil ? 2.3 : 4.5))
                     withAnimation { toast.wrappedValue = nil }
                 }
             }

@@ -45,6 +45,11 @@ struct WishlistView: View {
     }
 
     private var savedCard: some View {
+        NavigationLink { DeclinedListView() } label: { savedCardContent }
+            .buttonStyle(.plain)
+    }
+
+    private var savedCardContent: some View {
         Card {
             HStack {
                 VStack(alignment: .leading, spacing: 2) {
@@ -54,6 +59,7 @@ struct WishlistView: View {
                 Spacer()
                 Text("\(declined) declined · \(all.filter { $0.status == .bought }.count) bought")
                     .font(.system(size: 13)).foregroundStyle(Theme.secondary)
+                Image(systemName: "chevron.right").font(.system(size: 13, weight: .semibold)).foregroundStyle(Theme.secondary)
             }
             .padding(16)
         }
@@ -142,7 +148,11 @@ struct WishlistView: View {
     private func decline(_ w: WishlistItem) {
         w.status = .declined
         w.decidedDate = Date()
-        toast = Toast(title: "Saved \(money(w.price))", subtitle: "Declined \(w.name) · nice restraint")
+        toast = Toast(title: "Saved \(money(w.price))", subtitle: "Declined \(w.name) · nice restraint",
+                      actionTitle: "Undo") {
+            w.status = .waiting
+            w.decidedDate = nil
+        }
     }
 
     private func buy(_ w: WishlistItem) {
